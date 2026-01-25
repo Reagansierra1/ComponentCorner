@@ -42,3 +42,23 @@ nav {
 .nav-link:hover {
   color: #4da6ff;
 }
+
+/* Code is from ChatGPT*/
+.cart-icon {
+  position: relative;
+  font-size: 1.5rem;
+  cursor: pointer;
+}
+/* Code is from ChatGPT*/
+.cart-badge {
+  position: relative;
+  top: -8px;       /* move badge slightly above the icon */
+  right: -8px;     /* move badge slightly to the right */
+  background-color: red; /* classic badge color */
+  color: white;
+  border-radius: 50%;  /* makes it circular */
+  padding: 2px 15px;
+  font-size: 0.8rem;
+  font-weight: bold;
+  box-shadow: 0 0 2px rgba(0, 0, 0, 0.3); /* subtle shadow for better visibility */
+}
