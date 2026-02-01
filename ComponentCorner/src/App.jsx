@@ -1,12 +1,24 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import ProductCard from "./components/ProductCard";
 import Header from "./components/Header";
 import Hero from "./components/Hero";
 import Footer from "./components/Footer";
 import CartItem from "./components/CartItem";
+import { BrowserRouter, Routes, Route } from "react-router-dom";
+import HomePage from "./pages/HomePage";
+import ProductsPage from "./pages/ProductsPage";
+import CartPage from "./pages/CartPage";
+import './App.css';
 
 function App() {
-  const [productsincart, setCartState] = useState([]);
+  const [productsincart, setCartState] = useState(() => {
+    const savedCart = localStorage.getItem("cart");
+    return savedCart ? JSON.parse(savedCart) : [];
+  });
+  useEffect(() => {
+    localStorage.setItem("cart", JSON.stringify(productsincart));
+  }, [productsincart]);
+  
   const products = [
   { 
     id: 1, 
@@ -65,39 +77,26 @@ function App() {
   }, 0);
 
   return (
+    <BrowserRouter>
     <div className="app">
       <Header 
         storeName="Component Corner"
         cartAmount={productsincart.length}/>
-      <div className="mainContent">
-      <Hero
-        title ="Welcome to the store"
-        subtitle = "Here you can get anything you would like"
-        calltoaction = "Shop Here"/>
-      <h2>Featured Products</h2>
-      {products.map(product => (
-        <ProductCard
-          name={product.name}
-          description={product.description}
-          price={product.price}
-          image={product.image}
-          product={product}
-          addToCart={addToCart}
-          priceTotal
-        />
-      ))}
-      {productsincart.map(product => (
-        <CartItem
-          name={product.name}
-          price={product.price}
-          product={product}
-          removeFromCart = {removeFromCart}        
-        />
-      ))}
-      {productsincart.length > 0 ?
-      (<p>Total: ${priceTotal}</p>)
-      : <h2>Shopping is Empty</h2>}
-      </div>
+        <div className="main-content">
+        <Routes>
+          <Route path="/" element={<HomePage />} />
+          <Route path="/products" element={<ProductsPage
+                products={products}
+                addToCart={addToCart}
+                priceTotal={priceTotal}
+              />} />
+          <Route path="/cart" element={<CartPage 
+            products={productsincart}
+            removeFromCart={removeFromCart}
+            priceTotal={priceTotal}
+          />} />
+        </Routes>
+        </div>
       <Footer
         storeName="Component Corner"
         phone="909-888-4534"
@@ -105,6 +104,7 @@ function App() {
         address="123 Elvis Street, Counter City, ND 12567"
       />
     </div>
+    </BrowserRouter>
   )
 }
 
